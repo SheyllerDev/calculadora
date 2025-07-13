@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora Entel</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="system-container">
+        <header class="system-header">
+            <h1>Calculadora Entel</h1>
+        </header>
+
+        <div class="main-content">
+            <div class="panel-section input-group">
+                <label for="planTarifario" class="section-title">Plan Tarifario</label>
+                <select id="planTarifario" class="system-select">
+                    <option value="39.90">39.90</option>
+                    <option value="49.90">49.90</option>
+                    <option value="59.90">59.90</option>
+                    <option value="69.90">69.90</option>
+                    <option value="79.90">79.90</option>
+                    <option value="99.90">99.90</option>
+                    <option value="129.90">129.90</option>
+                </select>
+            </div>
+
+            <div class="panel-section input-group">
+                <label for="mesSeleccionado" class="section-title">Selecciona el Mes</label>
+                <select id="mesSeleccionado" class="system-select">
+                    </select>
+                <p id="diasDelMes" class="info-text"></p>
+            </div>
+
+            <div class="panel-section input-group">
+                <label for="fechaActivacion" class="section-title">Fecha de activación</label>
+                <input type="number" id="fechaActivacion" placeholder="Día (1-31)" min="1" max="31" class="system-input">
+                <p id="fechaActivacionError" class="error-text"></p>
+            </div>
+
+            <div class="panel-section input-group">
+                <label for="lineasActivas" class="section-title">¿Cliente cuenta con líneas activas postpago en Entel?</label>
+                <select id="lineasActivas" class="system-select">
+                    <option value="NO">NO</option>
+                    <option value="SI">SI</option>
+                </select>
+            </div>
+            
+            <div class="panel-section input-group">
+                <label for="cicloFact" class="section-title">¿CUÁL ES SU CICLO DE FACT?</label>
+                <select id="cicloFact" class="system-select">
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                </select>
+            </div>
+
+            <div class="panel-section info-panel">
+                <h2 id="tituloCicloFact" class="panel-heading"></h2>
+                <p class="panel-info-line">
+                    <span class="panel-info-label">Ciclo:</span> 
+                    <span id="cicloResultado" class="highlight-value"></span>
+                </p>
+            </div>
+
+            <div class="panel-section info-panel full-width">
+                <h2 class="panel-heading">INICIO / FIN DE FECHA DE FACTURACIÓN</h2>
+                <div class="date-display">
+                    <p><strong>Inicio:</strong> <span id="fechaInicio" class="highlight-date"></span></p>
+                    <p><strong>Fin:</strong> <span id="fechaFin" class="highlight-date"></span></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

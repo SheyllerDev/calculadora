@@ -1,0 +1,185 @@
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #eef2f7; /* Fondo más claro y moderno */
+    margin: 0;
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start; /* Alinea al inicio verticalmente */
+    min-height: 100vh; /* Asegura que ocupe toda la altura */
+    box-sizing: border-box; /* Incluye padding en el ancho total */
+}
+
+.system-container {
+    background-color: #ffffff;
+    border-radius: 12px; /* Bordes más suaves */
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1); /* Sombra más pronunciada */
+    width: 100%; /* Ocupa el 100% del ancho disponible del body */
+    max-width: 900px; /* Ancho máximo para pantallas grandes */
+    overflow: hidden; /* Asegura que los bordes redondeados se vean bien */
+    display: flex;
+    flex-direction: column;
+}
+
+.system-header {
+    background-color: #007bff; /* Color primario azul */
+    color: white;
+    padding: 15px 20px; /* Padding más pequeño */
+    text-align: center;
+    font-size: 1.5em; /* Tamaño de fuente más pequeño */
+    font-weight: 600;
+    border-bottom: 5px solid #0056b3; 
+    margin-bottom: 0; /* Elimina el margen inferior, el grid se encargará del espaciado */
+    width: 100%; /* Ocupa el ancho completo */
+    box-sizing: border-box; /* Incluye padding en el ancho total */
+}
+
+.system-header h1 {
+    margin: 0; /* Elimina márgenes por defecto del h1 */
+    padding: 0;
+}
+
+.main-content {
+    padding: 20px; /* Padding general para el contenido */
+    display: grid; 
+    grid-template-columns: 1fr; /* Por defecto, una columna para móviles */
+    gap: 20px; /* Espacio entre secciones */
+}
+
+/* Media Query para Tabletas y Laptops pequeñas */
+@media (min-width: 576px) {
+    .main-content {
+        grid-template-columns: 1fr 1fr; /* Dos columnas */
+    }
+    /* La última sección (INICIO / FIN) siempre ocupa todo el ancho */
+    .full-width {
+        grid-column: span 2; 
+    }
+}
+
+/* Media Query para Laptops grandes y Desktops */
+@media (min-width: 992px) {
+    .main-content {
+        grid-template-columns: repeat(3, 1fr); /* Tres columnas para desktops */
+    }
+    /* Las últimas secciones para ocupar el ancho completo */
+    .full-width {
+        grid-column: span 3; 
+    }
+    /* Ajustes para que las primeras 5 secciones se distribuyan bien */
+    .panel-section:nth-child(1),
+    .panel-section:nth-child(2),
+    .panel-section:nth-child(3),
+    .panel-section:nth-child(4),
+    .panel-section:nth-child(5) {
+        grid-column: span 1; /* Cada una ocupa una columna */
+    }
+}
+
+.panel-section {
+    background-color: #f9fbfd; /* Fondo ligeramente diferente para secciones */
+    border: 1px solid #e0e6ed; /* Borde suave */
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05); /* Sombra suave para las secciones */
+    display: flex; 
+    flex-direction: column;
+    justify-content: flex-start; /* Alinea el contenido arriba */
+}
+
+.input-group label.section-title {
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 10px;
+    font-size: 1.1em;
+    display: block; 
+}
+
+.system-select, .system-input {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #cce0f0; 
+    border-radius: 6px;
+    font-size: 1em;
+    background-color: #ffffff;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    box-sizing: border-box; 
+}
+
+.system-select:focus, .system-input:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25); 
+    outline: none;
+}
+
+.system-select:disabled {
+    background-color: #e9ecef;
+    cursor: not-allowed;
+    border-color: #ced4da;
+    color: #6c757d;
+}
+
+.info-text {
+    margin-top: 10px;
+    color: #0056b3;
+    font-style: italic;
+    font-size: 0.95em;
+}
+
+.error-text {
+    color: #dc3545; 
+    font-size: 0.9em;
+    margin-top: 5px;
+    font-weight: 500;
+}
+
+.info-panel {
+    background-color: #e0f2ff; 
+    border-left: 5px solid #007bff; 
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start; 
+    align-items: flex-start; 
+    padding: 20px;
+}
+
+.panel-heading {
+    color: #0056b3;
+    font-size: 1.2em; 
+    margin-top: 0;
+    margin-bottom: 15px;
+    width: 100%;
+    text-align: left;
+    border-bottom: 1px dashed #a8d6ff; 
+    padding-bottom: 10px;
+}
+
+/* Nuevo estilo para la línea completa de "Ciclo: [valor]" */
+.panel-info-line {
+    margin-bottom: 0; /* Elimina margen inferior de párrafo por defecto */
+    margin-top: 0; /* Elimina margen superior de párrafo por defecto */
+}
+
+.panel-info-label { 
+    font-weight: 600;
+    color: #495057;
+    margin-right: 5px; /* Espacio entre etiqueta y valor */
+}
+
+.highlight-value {
+    font-size: 1.2em; 
+    font-weight: bold;
+    color: #28a745; 
+}
+
+.date-display p {
+    margin: 8px 0;
+    font-size: 1.05em; 
+    color: #343a40;
+}
+
+.highlight-date {
+    font-weight: bold;
+    color: #17a2b8; 
+    font-size: 1em; 
+}
