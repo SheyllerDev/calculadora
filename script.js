@@ -229,3 +229,4 @@ document.addEventListener('DOMContentLoaded', () => {
     toggleCicloFact(); 
     updateCicloInfo();
     updateFacturacionInfo();
+});
