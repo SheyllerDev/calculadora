@@ -20,7 +20,7 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     // Referencias a los elementos del DOM
-    const planTarifarioSelect = document.getElementById('planTarifario'); // Añadido
+    const planTarifarioSelect = document.getElementById('planTarifario');
     const mesSeleccionado = document.getElementById('mesSeleccionado');
     const diasDelMesElement = document.getElementById('diasDelMes');
     const fechaActivacionInput = document.getElementById('fechaActivacion');
@@ -34,17 +34,21 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- Lógica del 2do desplegable (Meses y Días) ---
 
-    // Generar opciones de meses (incluyendo "Seleccione un mes")
+    // Función para generar y poblar opciones de meses (incluyendo "Seleccione un mes")
     function populateMeses() {
-        // Añadir la opción "Seleccione un mes" primero
+        // Limpiar opciones existentes para evitar duplicados si se llama más de una vez
+        mesSeleccionado.innerHTML = ''; 
+
+        // 1. Añadir la opción "Seleccione un mes" primero
         const defaultOption = document.createElement('option');
         defaultOption.value = ""; // Valor vacío
         defaultOption.textContent = "Seleccione un mes";
-        defaultOption.disabled = true;
-        defaultOption.selected = true;
-        defaultOption.hidden = true;
+        defaultOption.disabled = true; // No se puede seleccionar después
+        defaultOption.selected = true; // Será la opción inicial seleccionada
+        defaultOption.hidden = true; // Se oculta una vez que se selecciona otra opción
         mesSeleccionado.appendChild(defaultOption);
 
+        // 2. Añadir el resto de los meses
         meses.forEach((mes, index) => {
             const option = document.createElement('option');
             option.value = index + 1; // 1-12
@@ -52,7 +56,7 @@ document.addEventListener('DOMContentLoaded', () => {
             mesSeleccionado.appendChild(option);
         });
     }
-    populateMeses(); // Llama a la función al cargar
+    populateMeses(); // Llama a la función al cargar la página para poblar los meses
 
     // Función para obtener los días del mes
     function getDaysInMonth(monthIndex, year) {
@@ -75,7 +79,7 @@ document.addEventListener('DOMContentLoaded', () => {
         updateDiasDelMes();
         updateFacturacionInfo(); 
     });
-    // Llamar una vez al inicio para que el mensaje "Seleccione un mes" aparezca
+    // Llamar una vez al inicio para que el mensaje "Por favor, seleccione un mes." aparezca
     updateDiasDelMes(); 
 
     // --- Lógica del Textbox (Fecha de activación) ---
@@ -88,8 +92,9 @@ document.addEventListener('DOMContentLoaded', () => {
             fechaActivacionError.textContent = ""; // No mostrar error, solo se espera input
         } else if (isNaN(value) || value < 1 || value > 31) {
             fechaActivacionError.textContent = "Dato inválido: Ingrese un número entre 1 y 31.";
+            // Evitar múltiples alertas si el usuario sigue tecleando un valor inválido
             if (value !== '') { 
-                alert("Dato inválido: Ingrese un número entre 1 y 31.");
+                // alert("Dato inválido: Ingrese un número entre 1 y 31."); // Comentado para evitar pop-ups molestos
             }
         } else {
             if (String(value).length > 2) {
@@ -109,9 +114,10 @@ document.addEventListener('DOMContentLoaded', () => {
         const clienteActivo = lineasActivasSelect.value === 'SI';
         cicloFactSelect.disabled = !clienteActivo; 
         
-        // Si se deshabilita, resetear a "Seleccione un ciclo"
+        // Si se deshabilita, resetear a "Seleccione un ciclo" y actualizar info
         if (!clienteActivo) {
             cicloFactSelect.value = ""; 
+            updateCicloInfo(); // Actualiza el panel de ciclo cuando se deshabilita
         }
     }
 
@@ -131,7 +137,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
             cicloResultadoElement.textContent = resultadoCiclo; 
             
-        } else {
+        } else { // Si NO es cliente activo, el ciclo depende de la fecha de activación
             tituloCicloFactElement.textContent = "CICLO DE FACTURACIÓN A ASIGNAR";
             const fechaActivacion = parseInt(fechaActivacionInput.value);
             if (isNaN(fechaActivacion) || fechaActivacion < 1 || fechaActivacion > 31) {
@@ -151,13 +157,13 @@ document.addEventListener('DOMContentLoaded', () => {
         const selectedMonth = parseInt(mesSeleccionado.value);
 
         // Validaciones iniciales para mostrar mensajes de solicitud
-        if (planTarifarioSelect.value === "") { // Añadido
+        if (planTarifarioSelect.value === "") { 
              fechaInicioElement.textContent = 'Seleccione un plan';
              fechaFinElement.textContent = 'Seleccione un plan';
              return;
         }
 
-        if (isNaN(selectedMonth) || mesSeleccionado.value === "") {
+        if (isNaN(selectedMonth) || mesSeleccionado.value === "") { // Si el mes es "Seleccione un mes" o inválido
             fechaInicioElement.textContent = 'Seleccione un mes';
             fechaFinElement.textContent = 'Seleccione un mes';
             return;
@@ -172,7 +178,7 @@ document.addEventListener('DOMContentLoaded', () => {
             cicloDeterminante = asignacionesCicloFecha[fechaActivacion];
         } else { // Si SÍ tiene líneas activas, depende del ciclo seleccionado
             const cicloSeleccionadoPorCliente = cicloFactSelect.value;
-            if (cicloSeleccionadoPorCliente === "") {
+            if (cicloSeleccionadoPorCliente === "") { // Si el ciclo es "Seleccione un ciclo" o inválido
                 fechaInicioElement.textContent = 'Seleccione un ciclo';
                 fechaFinElement.textContent = 'Seleccione un ciclo';
                 return;
@@ -185,12 +191,14 @@ document.addEventListener('DOMContentLoaded', () => {
         if (fechasTemplate) {
             const currentMonthName = meses[selectedMonth - 1]; 
             
-            let nextMonthIndex = selectedMonth + 1; // Ya es 1-12
+            let nextMonthIndex = selectedMonth; // El índice del mes siguiente (basado en 1-12)
             let nextMonthName;
-            if (nextMonthIndex > 12) {
-                nextMonthIndex = 1; 
-                nextMonthName = meses[0]; // Enero del siguiente año
+
+            if (selectedMonth === 12) { // Si el mes actual es Diciembre
+                nextMonthIndex = 1; // El siguiente es Enero
+                nextMonthName = meses[0]; // Enero
             } else {
+                nextMonthIndex = selectedMonth + 1;
                 nextMonthName = meses[nextMonthIndex - 1];
             }
 
@@ -213,7 +221,8 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Event listeners para los desplegables
-    planTarifarioSelect.addEventListener('change', updateFacturacionInfo); // Añadido
+    planTarifarioSelect.addEventListener('change', updateFacturacionInfo); 
+
     lineasActivasSelect.addEventListener('change', () => {
         toggleCicloFact(); 
         updateCicloInfo(); 
@@ -226,7 +235,8 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // Inicializar la información al cargar la página
+    // Asegurarse de que las validaciones iniciales muestren los mensajes "Seleccione..."
     toggleCicloFact(); 
-    updateCicloInfo();
-    updateFacturacionInfo();
+    updateCicloInfo(); // Se llamará aquí al inicio, mostrando "Seleccione un ciclo" si está deshabilitado
+    updateFacturacionInfo(); // Se llamará aquí al inicio, mostrando "Seleccione un plan/mes"
 });
